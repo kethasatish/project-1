@@ -1,0 +1,108 @@
+# guess the word
+import random
+
+def display_hangman(tries):
+    
+    stages = [
+        """
+           ------
+           |    |
+           |    O
+           |   /|\
+           |   / \
+           |
+        """,
+        """
+           ------
+           |    |
+           |    O
+           |   /|\
+           |   /
+           |
+        """,
+        """
+           ------
+           |    |
+           |    O
+           |   /|
+           |
+           |
+        """,
+        """
+           ------
+           |    |
+           |    O
+           |    |
+           |
+           |
+        """,
+        """
+           ------
+           |    |
+           |    O
+           |
+           |
+           |
+        """,
+        """
+           ------
+           |    |
+           |
+           |
+           |
+        """,
+        """
+           ------
+           
+           
+           
+           
+        """
+    ]
+    return stages[tries]
+
+def play_game():
+    """Main function to play the Hangman game."""
+    words = ["python", "hangman", "challenge", "programming", "development"]
+    word_to_guess = random.choice(words)
+    guessed_word = ["_"] * len(word_to_guess)
+    guessed_letters = set()
+    tries = 6
+
+    print("Welcome to Hangman!")
+    
+    while tries > 0 and "_" in guessed_word:
+        print(display_hangman(tries))
+        print("Current word: " + " ".join(guessed_word))
+        print(f"Guessed letters: {', '.join(sorted(guessed_letters))}")
+        print(f"Remaining attempts: {tries}")
+
+        guess = input("Guess a letter: ").lower()
+
+        if len(guess) != 1 or not guess.isalpha():
+            print("Invalid input! Please enter a single letter.")
+            continue
+        
+        if guess in guessed_letters:
+            print("You've already guessed that letter. Try again.")
+            continue
+        
+        guessed_letters.add(guess)
+
+        if guess in word_to_guess:
+            for index, letter in enumerate(word_to_guess):
+                if letter == guess:
+                    guessed_word[index] = guess
+            print("Good guess!")
+        else:
+            tries -= 1
+            print("Wrong guess!")
+
+    if "_" not in guessed_word:
+        print(f"Congratulations! You've guessed the word: {word_to_guess}")
+    else:
+        print(display_hangman(tries))
+        print(f"Sorry, you've run out of attempts. The word was: {word_to_guess}")
+
+if __name__ == "__main__":
+    play_game()
